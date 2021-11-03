@@ -96,6 +96,9 @@ VALUES ((SELECT id
     FROM users
     WHERE fname LIKE "Anthony" AND lname LIKE "Carroll"));
 
+INSERT INTO question_follows (question_id, user_id)
+VALUES (1, 6)
+
 
 
 

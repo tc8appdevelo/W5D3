@@ -121,6 +121,23 @@ class QuestionFollows
 
     questions.map {|contents| User.new(contents)} 
     end
+    
+    def self.followed_questions_for_user_id(user_id)
+        questions = QuestionsDatabase.instance.execute(<<-SQL, user_id)
+            SELECT questions.id, title, question_body, question_follows.user_id
+            FROM question_follows
+            JOIN questions ON question_follows.user_id = questions.user_id
+            WHERE question_follows.user_id = ?
+        SQL
+        
+    end
+
+
+
+
+
+
+
 
     def self.find_by_qid_uid(qid, uid)
         qfollow = QuestionsDatabase.instance.execute(<<-SQL, qid, uid)
@@ -130,5 +147,8 @@ class QuestionFollows
         SQL
         QuestionFollows.new(qfollow.first)
     end
+
+
+
 
 end
