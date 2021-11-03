@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS questions;
 DROP TABLE IF EXISTS question_follows;
 DROP TABLE IF EXISTS replies;
+DROP TABLE IF EXISTS question_likes;
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
@@ -14,7 +15,9 @@ CREATE TABLE users (
 CREATE TABLE questions (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
-    question_body TEXT NOT NULL
+    question_body TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE question_follows (
@@ -54,4 +57,23 @@ INSERT INTO users (fname, lname)
 VALUES ("Anthony", "Carroll");
 
 INSERT INTO users (fname, lname)
-VALUES ("Nck", "Barr");
+VALUES ("Nick", "Barr");
+
+INSERT INTO questions (title, question_body, user_id) 
+VALUES  ("No more questions", "Why is there two of these",
+    (SELECT id
+    FROM users
+    WHERE fname LIKE "Nick" AND lname LIKE "Barr"));
+
+INSERT INTO questions (title, question_body, user_id) 
+VALUES  ("What is a chinchilla", "Wild",
+    (SELECT id
+    FROM users
+    WHERE fname LIKE "Anthony" AND lname LIKE "Carroll"));
+
+INSERT INTO questions (title, question_body, user_id) 
+VALUES  ("new", "How do we complete a project",
+    (SELECT id
+    FROM users
+    WHERE fname LIKE "Sam" AND lname LIKE "Smith"));
+
