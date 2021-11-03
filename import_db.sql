@@ -51,13 +51,7 @@ CREATE TABLE question_likes (
 
 
 INSERT INTO users (fname, lname)
-VALUES ("Sam", "Smith"), ("Ryan", "Katzman"), ("Google", "Apple");
-
-INSERT INTO users (fname, lname)
-VALUES ("Anthony", "Carroll");
-
-INSERT INTO users (fname, lname)
-VALUES ("Nick", "Barr");
+VALUES ("Sam", "Smith"), ("Ryan", "Katzman"), ("Google", "Apple"), ("Anthony", "Carroll"), ("Nick", "Barr");
 
 INSERT INTO questions (title, question_body, user_id) 
 VALUES  ("No more questions", "Why is there two of these",
@@ -76,4 +70,33 @@ VALUES  ("new", "How do we complete a project",
     (SELECT id
     FROM users
     WHERE fname LIKE "Sam" AND lname LIKE "Smith"));
+
+INSERT INTO question_follows (question_id, user_id)
+VALUES ((SELECT id
+    FROM questions
+    WHERE title LIKE "new"), 
+    (SELECT id
+    FROM users
+    WHERE fname LIKE "Sam" AND lname LIKE "Smith"));
+
+INSERT INTO question_follows (question_id, user_id)
+VALUES ((SELECT id
+    FROM questions
+    WHERE title LIKE "What is a chinchilla"), 
+    (SELECT id
+    FROM users
+    WHERE fname LIKE "Anthony" AND lname LIKE "Carroll"));
+
+    
+INSERT INTO question_follows (question_id, user_id)
+VALUES ((SELECT id
+    FROM questions
+    WHERE title LIKE "new"), 
+    (SELECT id
+    FROM users
+    WHERE fname LIKE "Anthony" AND lname LIKE "Carroll"));
+
+
+
+
 

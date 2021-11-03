@@ -101,13 +101,25 @@ class QuestionFollows
         @user_id = options['user_id']
     end
 
-    def create
-        raise "#{self} is already in table" if self.id
-        qf = QuestionsDatabase.instance.execute(<<-SQL, self.question_id, self.user_id)
-            INSERT INTO question_follows (question_id, user_id)
-            VALUES (?, ?)
-        SQL
-        QuestionFollows.new(qf.first)
+    # def create
+    #     raise "#{self} is already in table" if self.user_id && self.question_id
+    #     qf = QuestionsDatabase.instance.execute(<<-SQL, self.question_id, self.user_id)
+    #         INSERT INTO question_follows (question_id, user_id)
+    #         VALUES (?, ?)
+    #     SQL
+    #     QuestionFollows.new(qf.first)
+    # end
+
+    def self.followers_for_question_id(question_id)
+        questions = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+        SELECT id, fname, lname
+        FROM question_follows
+        JOIN users
+            ON question_follows.user_id = users.id
+        WHERE question_id = ?
+    SQL
+
+    questions.map {|contents| User.new(contents)} 
     end
 
     def self.find_by_qid_uid(qid, uid)
